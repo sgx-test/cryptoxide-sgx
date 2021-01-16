@@ -401,6 +401,7 @@ impl Sha1 {
 }
 
 impl Digest for Sha1 {
+    const OUTPUT_BITS: usize = 160;
     fn reset(&mut self) {
         self.length_bits = 0;
         self.h[0] = 0x67452301u32;
@@ -416,9 +417,6 @@ impl Digest for Sha1 {
     }
     fn result(&mut self, out: &mut [u8]) {
         mk_result(self, out)
-    }
-    fn output_bits(&self) -> usize {
-        160
     }
     fn block_size(&self) -> usize {
         64
