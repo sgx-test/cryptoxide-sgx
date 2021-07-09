@@ -11,7 +11,7 @@ crate-type = ["staticlib"]
 default = []
 
 [dependencies]
-cryptoxide = { path = "../.."}
+cryptoxide = { path = "../"}
 serde_test = { git = "https://github.com/mesalock-linux/serde-sgx" }
 
 [target.'cfg(not(target_env = "sgx"))'.dependencies]
