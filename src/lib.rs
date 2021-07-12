@@ -23,6 +23,7 @@
 //! As with everything cryptographic implementations, please make sure it suits your security requirements,
 //! and review and audit before using.
 //!
+#![feature(min_const_generics)]
 
 #![warn(clippy::all)]
 #![allow(clippy::unreadable_literal)]
