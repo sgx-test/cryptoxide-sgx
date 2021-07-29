@@ -25,24 +25,24 @@ mod avx;
     any(target_arch = "x86", target_arch = "x86_64"),
     any(target_feature = "sse4.1", target_feature = "avx")
 )))]
-pub(crate) use reference::*;
+pub  use reference::*;
 
 #[cfg(all(
     target_arch = "x86_64",
     all(target_feature = "sse4.1", not(target_feature = "avx")),
 ))]
-pub(crate) use sse41::*;
+pub  use sse41::*;
 
 #[cfg(all(
     target_arch = "x86_64",
     all(target_feature = "sse4.1", target_feature = "avx"),
 ))]
-pub(crate) use avx::*;
+pub  use avx::*;
 
 /*
 #[cfg(all(any(target_arch = "x86_64"), target_feature = "sha"))]
 mod x64sha;
 
 #[cfg(all(any(target_arch = "x86_64"), target_feature = "sha",))]
-pub(crate) use x64sha::*;
+pub  use x64sha::*;
 */

@@ -1,12 +1,12 @@
 use crate::cryptoutil::read_u32v_be;
 
 #[inline(always)]
-pub(crate) fn e0(x: u32) -> u32 {
+pub  fn e0(x: u32) -> u32 {
     x.rotate_right(2) ^ x.rotate_right(13) ^ x.rotate_right(22)
 }
 
 #[inline(always)]
-pub(crate) fn e1(x: u32) -> u32 {
+pub  fn e1(x: u32) -> u32 {
     x.rotate_right(6) ^ x.rotate_right(11) ^ x.rotate_right(25)
 }
 
@@ -21,7 +21,7 @@ fn s1(x: u32) -> u32 {
 }
 
 // SHA256 64 constants K
-pub(crate) const K32: [u32; 64] = [
+pub  const K32: [u32; 64] = [
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
     0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
     0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
@@ -92,7 +92,7 @@ fn digest_block_u32(state: &mut [u32; 8], buf: &[u8]) {
     state[7] = state[7].wrapping_add(h);
 }
 
-pub(crate) fn digest_block(state: &mut [u32; 8], block: &[u8]) {
+pub  fn digest_block(state: &mut [u32; 8], block: &[u8]) {
     let mut i = 0;
     while i < block.len() {
         digest_block_u32(state, &block[i..i + 64]);

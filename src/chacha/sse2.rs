@@ -9,7 +9,7 @@ use core::arch::x86_64::*;
 use core::convert::TryInto;
 
 #[derive(Clone)]
-pub(crate) struct State {
+pub  struct State {
     a: __m128i,
     b: __m128i,
     c: __m128i,
@@ -124,7 +124,7 @@ impl State {
     }
 
     /// Initialize the state with key and nonce
-    pub(crate) fn init(key: &[u8], nonce: &[u8]) -> Self {
+    pub  fn init(key: &[u8], nonce: &[u8]) -> Self {
         let (a, b, c) = match key.len() {
             32 => Self::key32(key),
             16 => Self::key16(key),
@@ -135,7 +135,7 @@ impl State {
     }
 
     #[inline]
-    pub(crate) fn round20(&mut self) {
+    pub  fn round20(&mut self) {
         unsafe {
             for _ in 0..10 {
                 round!(self.a, self.b, self.c, self.d);
@@ -147,7 +147,7 @@ impl State {
     }
 
     #[inline]
-    pub(crate) fn increment(&mut self) {
+    pub  fn increment(&mut self) {
         let mut align = Align128::zero();
         align.from_m128i(self.d);
         let (a, overflowed) = align.0[0].overflowing_add(1);
@@ -160,7 +160,7 @@ impl State {
 
     #[inline]
     /// Add back the initial state
-    pub(crate) fn add_back(&mut self, initial: &Self) {
+    pub  fn add_back(&mut self, initial: &Self) {
         unsafe {
             self.a = _mm_add_epi32(self.a, initial.a);
             self.b = _mm_add_epi32(self.b, initial.b);
@@ -170,7 +170,7 @@ impl State {
     }
 
     #[inline]
-    pub(crate) fn output_bytes(&self, output: &mut [u8]) {
+    pub  fn output_bytes(&self, output: &mut [u8]) {
         #[allow(clippy::cast_ptr_alignment)]
         let o = output.as_mut_ptr() as *mut __m128i;
         unsafe {
@@ -182,7 +182,7 @@ impl State {
     }
 
     #[inline]
-    pub(crate) fn output_ad_bytes(&self, output: &mut [u8; 32]) {
+    pub  fn output_ad_bytes(&self, output: &mut [u8; 32]) {
         #[allow(clippy::cast_ptr_alignment)]
         let o = output.as_mut_ptr() as *mut __m128i;
         unsafe {

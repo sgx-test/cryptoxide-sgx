@@ -214,7 +214,7 @@ unsafe fn compress_4ways(state: &mut [u32; 8], schedule: &[__m128i; 64]) {
     compress_once!(3);
 }
 
-pub(crate) fn digest_block(state: &mut [u32; 8], mut block: &[u8]) {
+pub  fn digest_block(state: &mut [u32; 8], mut block: &[u8]) {
     unsafe {
         let mut schedule = [_mm_set1_epi32(0); 64];
         while block.len() >= 256 {

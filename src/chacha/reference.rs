@@ -2,7 +2,7 @@ use crate::cryptoutil::{read_u32_le, write_u32v_le};
 use crate::simd::u32x4;
 
 #[derive(Clone)]
-pub(crate) struct State {
+pub  struct State {
     a: u32x4,
     b: u32x4,
     c: u32x4,
@@ -75,7 +75,7 @@ impl State {
     // N1 N2 N3 N4 (16 bytes nonce) or 0 N1 N2 N3 (12 bytes nonce) or 0 0 N1 N2 (8 bytes nonce)
 
     /// Initialize the state with key and nonce
-    pub(crate) fn init(key: &[u8], nonce: &[u8]) -> Self {
+    pub  fn init(key: &[u8], nonce: &[u8]) -> Self {
         let (a, b, c) = match key.len() {
             16 => Self::init_key16(key),
             32 => Self::init_key32(key),
@@ -139,7 +139,7 @@ impl State {
     }
 
     #[inline]
-    pub(crate) fn round20(&mut self) {
+    pub  fn round20(&mut self) {
         for _ in 0..10 {
             round!(self);
             swizzle!(self.b, self.c, self.d);
@@ -150,7 +150,7 @@ impl State {
 
     #[inline]
     #[allow(dead_code)]
-    pub(crate) fn round12(&mut self) {
+    pub  fn round12(&mut self) {
         for _ in 0..8 {
             round!(self);
             swizzle!(self.b, self.c, self.d);
@@ -161,7 +161,7 @@ impl State {
 
     #[inline]
     #[allow(dead_code)]
-    pub(crate) fn round8(&mut self) {
+    pub  fn round8(&mut self) {
         for _ in 0..4 {
             round!(self);
             swizzle!(self.b, self.c, self.d);
@@ -171,13 +171,13 @@ impl State {
     }
 
     #[inline]
-    pub(crate) fn increment(&mut self) {
+    pub  fn increment(&mut self) {
         self.d = self.d + u32x4(1, 0, 0, 0);
     }
 
     #[inline]
     /// Add back the initial state
-    pub(crate) fn add_back(&mut self, initial: &Self) {
+    pub  fn add_back(&mut self, initial: &Self) {
         self.a = self.a + initial.a;
         self.b = self.b + initial.b;
         self.c = self.c + initial.c;
@@ -185,12 +185,12 @@ impl State {
     }
 
     #[inline]
-    pub(crate) fn output_bytes(&self, output: &mut [u8]) {
+    pub  fn output_bytes(&self, output: &mut [u8]) {
         state_to_buffer!(self, output);
     }
 
     #[inline]
-    pub(crate) fn output_ad_bytes(&self, output: &mut [u8; 32]) {
+    pub  fn output_ad_bytes(&self, output: &mut [u8; 32]) {
         let u32x4(a1, a2, a3, a4) = self.a;
         let u32x4(d1, d2, d3, d4) = self.d;
         let lens = [a1, a2, a3, a4, d1, d2, d3, d4];

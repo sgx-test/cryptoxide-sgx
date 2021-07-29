@@ -23,6 +23,7 @@
 //! As with everything cryptographic implementations, please make sure it suits your security requirements,
 //! and review and audit before using.
 //!
+#![feature(min_const_generics)]
 
 #![warn(clippy::all)]
 #![allow(clippy::unreadable_literal)]
@@ -35,6 +36,13 @@
 #![no_std]
 #![cfg_attr(feature = "with-bench", feature(test))]
 
+#![cfg_attr(all(feature = "mesalock_sgx", not(target_env = "sgx")), no_std)]
+#![cfg_attr(all(target_env = "sgx", target_vendor = "mesalock"), feature(rustc_private))]
+
+#[cfg(all(feature = "mesalock_sgx", not(target_env = "sgx")))]
+#[macro_use]
+extern crate sgx_tstd as std;
+
 #[cfg(test)]
 #[cfg(feature = "with-bench")]
 extern crate test;
@@ -42,9 +50,10 @@ extern crate test;
 #[cfg(not(feature = "std"))]
 extern crate alloc;
 
-#[cfg(test)]
-#[macro_use]
-extern crate std;
+
+//#[cfg(test)]
+//#[macro_use]
+//extern crate std;
 
 #[cfg(feature = "blake2")]
 pub mod blake2;

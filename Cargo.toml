@@ -18,6 +18,8 @@ doctest = false
 [build-dependencies]
 
 [dependencies]
+sgx_tstd = { rev = "v1.1.3", git = "https://github.com/apache/teaclave-sgx-sdk.git", optional = true }
+
 
 [features]
 default = ["blake2", "sha1", "sha2", "sha3", "chacha", "salsa", "hkdf", "hmac", "pbkdf2", "poly1305", "scrypt", "curve25519", "ed25519"]

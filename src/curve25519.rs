@@ -1137,7 +1137,7 @@ pub struct GeP3 {
 }
 
 #[derive(Clone)]
-pub struct GeP1P1 {
+pub  struct GeP1P1 {
     x: Fe,
     y: Fe,
     z: Fe,
@@ -1145,14 +1145,14 @@ pub struct GeP1P1 {
 }
 
 #[derive(Clone)]
-pub struct GePrecomp {
+pub  struct GePrecomp {
     y_plus_x: Fe,
     y_minus_x: Fe,
     xy2d: Fe,
 }
 
 #[derive(Clone)]
-pub struct GeCached {
+pub  struct GeCached {
     y_plus_x: Fe,
     y_minus_x: Fe,
     z: Fe,
@@ -1160,7 +1160,7 @@ pub struct GeCached {
 }
 
 impl GeP1P1 {
-    pub fn to_p2(&self) -> GeP2 {
+    pub  fn to_p2(&self) -> GeP2 {
         GeP2 {
             x: &self.x * &self.t,
             y: &self.y * &self.z,
@@ -1187,7 +1187,7 @@ impl GeP2 {
         }
     }
 
-    pub fn to_bytes(&self) -> [u8; 32] {
+    pub  fn to_bytes(&self) -> [u8; 32] {
         let recip = self.z.invert();
         let x = &self.x * &recip;
         let y = &self.y * &recip;
@@ -1254,7 +1254,11 @@ impl GeP2 {
     and b = b[0]+256*b[1]+...+256^31 b[31].
     B is the Ed25519 base point (x,4/5) with x positive.
     */
-    pub fn double_scalarmult_vartime(a_scalar: &[u8], a_point: GeP3, b_scalar: &[u8]) -> GeP2 {
+    pub  fn double_scalarmult_vartime(
+        a_scalar: &[u8],
+        a_point: GeP3,
+        b_scalar: &[u8],
+    ) -> GeP2 {
         let aslide = GeP2::slide(a_scalar);
         let bslide = GeP2::slide(b_scalar);
 
@@ -1308,7 +1312,7 @@ impl GeP2 {
 }
 
 impl GeP3 {
-    pub fn from_bytes_negate_vartime(s: &[u8]) -> Option<GeP3> {
+    pub  fn from_bytes_negate_vartime(s: &[u8]) -> Option<GeP3> {
         let y = Fe::from_bytes(s);
         let z = FE_ONE.clone();
         let y_squared = y.square();
@@ -1352,7 +1356,7 @@ impl GeP3 {
         }
     }
 
-    pub fn to_cached(&self) -> GeCached {
+    pub  fn to_cached(&self) -> GeCached {
         GeCached {
             y_plus_x: &self.y + &self.x,
             y_minus_x: &self.y - &self.x,
@@ -1374,7 +1378,7 @@ impl GeP3 {
         self.to_p2().dbl()
     }
 
-    pub fn to_bytes(&self) -> [u8; 32] {
+    pub  fn to_bytes(&self) -> [u8; 32] {
         let recip = self.z.invert();
         let x = &self.x * &recip;
         let y = &self.y * &recip;
@@ -1534,13 +1538,13 @@ impl GePrecomp {
         }
     }
 
-    pub fn maybe_set(&mut self, other: &GePrecomp, do_swap: i32) {
+    pub  fn maybe_set(&mut self, other: &GePrecomp, do_swap: i32) {
         self.y_plus_x.maybe_set(&other.y_plus_x, do_swap);
         self.y_minus_x.maybe_set(&other.y_minus_x, do_swap);
         self.xy2d.maybe_set(&other.xy2d, do_swap);
     }
 
-    pub fn select(pos: usize, b: i8) -> GePrecomp {
+    pub  fn select(pos: usize, b: i8) -> GePrecomp {
         let bnegative = (b as u8) >> 7;
         let babs: u8 = (b - (((-(bnegative as i8)) & b) << 1)) as u8;
         let mut t = GePrecomp::zero();
@@ -2214,6 +2218,8 @@ pub fn sc_muladd(s: &mut[u8], a: &[u8], b: &[u8], c: &[u8]) {
     s[31] = (s11 >> 17) as u8;
 }
 
+/// Computes a shared secret from the curve25519 private key (n) and public
+/// key (p)
 pub fn curve25519(n: &[u8], p: &[u8]) -> [u8; 32] {
     let mut e = [0u8; 32];
     let mut x2;
@@ -2275,6 +2281,7 @@ pub fn curve25519(n: &[u8], p: &[u8]) -> [u8; 32] {
     (z2.invert() * x2).to_bytes()
 }
 
+/// Derives a public key from a private key
 pub fn curve25519_base(x: &[u8]) -> [u8; 32] {
     let mut base: [u8; 32] = [0; 32];
     base[0] = 9;

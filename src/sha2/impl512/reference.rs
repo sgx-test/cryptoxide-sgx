@@ -85,7 +85,7 @@ fn digest_round(ae: u64x2, bf: u64x2, cg: u64x2, dh: u64x2, wk0: u64) -> u64x2 {
 }
 
 /// Process a block with the SHA-512 algorithm.
-pub(crate) fn digest_block_u64(state: &mut [u64; 8], block: &[u64; 16]) {
+pub  fn digest_block_u64(state: &mut [u64; 8], block: &[u64; 16]) {
     let k = &K64X2;
 
     macro_rules! schedule {
@@ -190,7 +190,7 @@ pub(crate) fn digest_block_u64(state: &mut [u64; 8], block: &[u64; 16]) {
     state[7] = state[7].wrapping_add(h);
 }
 
-pub(crate) fn digest_block(state: &mut [u64; 8], mut block: &[u8]) {
+pub  fn digest_block(state: &mut [u64; 8], mut block: &[u8]) {
     let mut block2 = [0u64; 16];
 
     while !block.is_empty() {
